@@ -1,14 +1,20 @@
 const express = require("express")
+const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const chalk = require("chalk")
+const path = require("path")
 const { ApolloServer } = require("apollo-server-express")
 const { makeExecutableSchema } = require("graphql-tools")
 
+const postgres = require("./utils/postgres")
 const typeDefs = require("./schema")
 const resolvers = require("./resolvers")
 
 const app = express()
-const PORT = process.env.PORT || 8080
+const PORT = 8080
+
+app.set("JWT_SECRET", process.env.JWT_SECRET || "DEV_SECRET")
+app.set("JWT_COOKIE_NAME", "token")
 
 if (process.env.NODE_ENV !== "development") {
   const root = path.resolve(__dirname, "../client")
@@ -52,7 +58,8 @@ const apolloServer = new ApolloServer({
     }
     return {
       app,
-      req
+      req,
+      postgres
     }
   },
   schema
