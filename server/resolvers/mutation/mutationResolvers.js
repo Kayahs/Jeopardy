@@ -13,18 +13,29 @@ module.exports = {
       { app, req, postgres },
       info
     ) {
-      const hashedPassword = await bcrypt.hash(password, saltRounds)
-      const emailLowerCase = email.toString().toLowerCase()
+      try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds)
+        const emailLowerCase = email.toString().toLowerCase()
 
-      const newUserInsert = {
-        text:
-          "INSERT INTO jeopardy.users (fullname, email, password) VALUES ($1, $2, $3) RETURNING *",
-        values: [fullname, emailLowerCase, hashedPassword]
-      }
+        const newUserInsert = {
+          text:
+            "INSERT INTO jeopardy.users (fullname, email, password) VALUES ($1, $2, $3) RETURNING *",
+          values: [fullname, emailLowerCase, hashedPassword]
+        }
 
-      const newUserResult = await postgres.query(newUserInsert)
-      return {
-        user: newUserResult.rows[0]
+        const newUserResult = await postgres.query(newUserInsert)
+        return {
+          user: newUserResult.rows[0]
+        }
+      } catch (e) {
+        if (e.constraint == "users_email_key") {
+          return {
+            error: {
+              code: 401,
+              message: "That email address is taken, please enter a new email."
+            }
+          }
+        }
       }
     },
     async login(
