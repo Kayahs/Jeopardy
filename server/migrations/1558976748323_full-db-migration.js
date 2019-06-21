@@ -3,6 +3,7 @@ exports.up = pgm => {
   pgm.sql(`
     CREATE TABLE "jeopardy"."users" (
       "id" SERIAL PRIMARY KEY,
+      "fullname" TEXT,
       "email" TEXT UNIQUE NOT NULL,
       "password" TEXT NOT NULL
     );
@@ -23,14 +24,15 @@ exports.up = pgm => {
       "quiz_id" INTEGER REFERENCES quizzes(id) NOT NULL
     );
   `),
-    //5. Questions Table
+    //4. Questions Table
     pgm.sql(`
       CREATE TABLE "jeopardy"."questions" (
         "id" SERIAL PRIMARY KEY,
         "category_id" INTEGER REFERENCES categories(id) NOT NULL,
         "quiz_id" INTEGER REFERENCES quizzes(id) NOT NULL,
         "question" TEXT NOT NULL,
-        "answer" TEXT NOT NULL
+        "answer" TEXT NOT NULL,
+        "points" INTEGER NOT NULL
       );
   `)
 }
