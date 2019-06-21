@@ -16,15 +16,21 @@ module.exports = gql`
     password: String!
   }
 
+  type Error {
+    code: Int
+    message: String
+  }
+
+  type LoginResponse {
+    error: Error
+    csrfToken: String
+    user: User
+  }
+
   input NewUserInput {
     fullname: String
     email: String!
     password: String!
-  }
-
-  type LoginResponse {
-    csrfToken: String
-    user: User!
   }
 
   input LoginInput {
