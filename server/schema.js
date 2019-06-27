@@ -11,6 +11,7 @@ module.exports = gql`
     createQuiz(input: NewQuizInput!): NewQuizResponse!
     addCategory(input: NewCategoryInput!): NewCategoryResponse!
     addQuestion(input: NewQuestionInput!): NewQuestionResponse!
+    logout: Boolean
   }
 
   type User {
