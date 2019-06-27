@@ -36,7 +36,6 @@ module.exports = {
           token: authUtil.generateToken(user, app.get("JWT_SECRET"), csrfToken),
           res: req.res
         })
-        console.log("hello")
         return {
           user,
           csrfToken
@@ -104,6 +103,29 @@ module.exports = {
       return {
         user,
         csrfToken
+      }
+    },
+    async createQuiz(
+      parent,
+      {
+        input: { title }
+      },
+      { app, req, postgres, authUtil },
+      info
+    ) {
+      const userId = authUtil.authenticate(app, req)
+
+      const createQuiz = {
+        text:
+          "INSERT INTO jeopardy.quizzes (title, owner_id) VALUES ($1,$2) RETURNING *",
+        values: [title, userId]
+      }
+
+      const createQuizResult = await postgres.query(createQuiz)
+      const quiz = createQuizResult.rows[0]
+
+      return {
+        quiz
       }
     }
   }
