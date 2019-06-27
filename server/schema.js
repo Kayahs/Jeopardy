@@ -26,6 +26,18 @@ module.exports = gql`
   type Quiz {
     title: String
     owner: User
+    categories: [Category]
+  }
+
+  type Category {
+    name: String
+    questions: [Question]
+  }
+
+  type Question {
+    question: String
+    answer: String
+    points: Int
   }
 
   type LoginResponse {
