@@ -105,6 +105,11 @@ module.exports = {
         csrfToken
       }
     },
+    async logout(parent, {}, { app, req }) {
+      const cookieName = app.get("JWT_COOKIE_NAME")
+      req.res.clearCookie(cookieName)
+      return true
+    },
     async createQuiz(
       parent,
       {
