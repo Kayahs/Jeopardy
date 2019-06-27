@@ -9,6 +9,7 @@ module.exports = gql`
     signup(input: NewUserInput!): LoginResponse!
     login(input: LoginInput!): LoginResponse!
     createQuiz(input: NewQuizInput!): NewQuizResponse!
+    addCategory(input: NewCategoryInput!): NewCategoryResponse!
   }
 
   type User {
@@ -30,6 +31,7 @@ module.exports = gql`
   }
 
   type Category {
+    id: ID
     name: String
     questions: [Question]
   }
@@ -51,6 +53,11 @@ module.exports = gql`
     quiz: Quiz
   }
 
+  type NewCategoryResponse {
+    error: Error
+    category: Category
+  }
+
   input NewUserInput {
     fullname: String
     email: String!
@@ -64,5 +71,10 @@ module.exports = gql`
 
   input NewQuizInput {
     title: String!
+  }
+
+  input NewCategoryInput {
+    name: String!
+    quiz_id: ID!
   }
 `

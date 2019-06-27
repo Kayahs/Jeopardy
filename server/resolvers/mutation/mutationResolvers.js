@@ -127,6 +127,41 @@ module.exports = {
       return {
         quiz
       }
+    },
+    async addCategory(
+      parent,
+      {
+        input: { name, quiz_id }
+      },
+      { app, req, postgres, authUtil },
+      info
+    ) {
+      const userId = authUtil.authenticate(app, req)
+
+      const getQuizOwner = {
+        text: "SELECT owner_id FROM jeopardy.quizzes WHERE id=$1",
+        values: [quiz_id]
+      }
+
+      const getQuizOwnerResult = await postgres.query(getQuizOwner)
+      if (userId != getQuizOwnerResult.rows[0].owner_id)
+        return {
+          error: {
+            code: 401,
+            message: "Please stop sending weird requests to my server."
+          }
+        }
+
+      const addQuizCategory = {
+        text:
+          "INSERT INTO jeopardy.categories (name, quiz_id) VALUES ($1, $2) RETURNING *",
+        values: [name, quiz_id]
+      }
+
+      const addQuizCategoryResult = await postgres.query(addQuizCategory)
+      const category = addQuizCategoryResult.rows[0]
+
+      return { category }
     }
   }
 }
