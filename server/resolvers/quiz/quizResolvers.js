@@ -3,7 +3,15 @@ module.exports = {
     async owner(parent, args, { postgres }, info) {
       const id = parent.owner_id
 
-      return { id }
+      const getUser = {
+        text: "SELECT * FROM jeopardy.users WHERE id=$1",
+        values: [id]
+      }
+
+      const getUserResult = await postgres.query(getUser)
+      const user = getUserResult.rows[0]
+
+      return user
     }
   }
 }
