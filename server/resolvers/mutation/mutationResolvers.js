@@ -162,6 +162,57 @@ module.exports = {
       const category = addQuizCategoryResult.rows[0]
 
       return { category }
+    },
+    async addQuestion(
+      parent,
+      {
+        input: { category_id, quiz_id, question, answer, points }
+      },
+      { app, req, postgres, authUtil },
+      info
+    ) {
+      const userId = authUtil.authenticate(app, req)
+
+      const getQuizOwner = {
+        text: "SELECT owner_id FROM jeopardy.quizzes WHERE id=$1",
+        values: [quiz_id]
+      }
+
+      const getQuizOwnerResult = await postgres.query(getQuizOwner)
+
+      if (userId != getQuizOwnerResult.rows[0].owner_id)
+        return {
+          error: {
+            code: 401,
+            message: "Please stop sending weird requests to my server."
+          }
+        }
+
+      const getNumQuestions = {
+        text:
+          "SELECT count(id) FROM jeopardy.questions WHERE quiz_id=$1 AND category_id=$2",
+        values: [quiz_id, category_id]
+      }
+
+      const getNumQuestionsResult = await postgres.query(getNumQuestions)
+      const numQuestions = getNumQuestionsResult.rows[0].count
+      if (numQuestions >= 5)
+        return {
+          error: { code: 400, message: "Too many questions for this category." }
+        }
+
+      const addQuestion = {
+        text:
+          "INSERT INTO jeopardy.questions (category_id, quiz_id, question, answer, points) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        values: [category_id, quiz_id, question, answer, points]
+      }
+
+      const addQuestionResult = await postgres.query(addQuestion)
+      const new_question = addQuestionResult.rows[0]
+
+      return {
+        question: new_question
+      }
     }
   }
 }
