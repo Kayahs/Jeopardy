@@ -6,7 +6,8 @@ const path = require("path")
 const { ApolloServer } = require("apollo-server-express")
 const { makeExecutableSchema } = require("graphql-tools")
 
-const postgres = require("./utils/postgres")
+const postgres = require("./config/postgres")
+const { authUtil } = require("./utils/index")
 const typeDefs = require("./schema")
 const resolvers = require("./resolvers")
 
@@ -59,7 +60,8 @@ const apolloServer = new ApolloServer({
     return {
       app,
       req,
-      postgres
+      postgres,
+      authUtil
     }
   },
   schema

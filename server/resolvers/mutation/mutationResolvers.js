@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const crypto = require("crypto")
+const Promise = require("bluebird")
 
 const saltRounds = 12
 
@@ -10,7 +12,7 @@ module.exports = {
       {
         input: { fullname, email, password }
       },
-      { app, req, postgres },
+      { app, req, postgres, authUtil },
       info
     ) {
       try {
@@ -24,8 +26,20 @@ module.exports = {
         }
 
         const newUserResult = await postgres.query(newUserInsert)
+        const user = newUserResult.rows[0]
+        const csrfTokenBinary = await Promise.promisify(crypto.randomBytes)(32)
+        const csrfToken = Buffer.from(csrfTokenBinary, "binary").toString(
+          "base64"
+        )
+        authUtil.setCookie({
+          tokenName: app.get("JWT_COOKIE_NAME"),
+          token: authUtil.generateToken(user, app.get("JWT_SECRET"), csrfToken),
+          res: req.res
+        })
+        console.log("hello")
         return {
-          user: newUserResult.rows[0]
+          user,
+          csrfToken
         }
       } catch (e) {
         if (e.constraint == "users_email_key") {
@@ -36,6 +50,7 @@ module.exports = {
             }
           }
         }
+        console.log(e)
       }
     },
     async login(
@@ -43,7 +58,7 @@ module.exports = {
       {
         input: { email, password }
       },
-      { app, req, postgres },
+      { app, req, postgres, authUtil },
       info
     ) {
       const emailLowerCase = email.toString().toLowerCase()
@@ -75,8 +90,20 @@ module.exports = {
         }
       }
 
+      const csrfTokenBinary = await Promise.promisify(crypto.randomBytes)(32)
+      const csrfToken = Buffer.from(csrfTokenBinary, "binary").toString(
+        "base64"
+      )
+
+      authUtil.setCookie({
+        tokenName: app.get("JWT_COOKIE_NAME"),
+        token: authUtil.generateToken(user, app.get("JWT_SECRET"), csrfToken),
+        res: req.res
+      })
+
       return {
-        user: user
+        user,
+        csrfToken
       }
     }
   }
