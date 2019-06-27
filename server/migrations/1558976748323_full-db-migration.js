@@ -21,7 +21,8 @@ exports.up = pgm => {
     CREATE TABLE "jeopardy"."categories" (
       "id" SERIAL PRIMARY KEY,
       "name" TEXT NOT NULL,
-      "quiz_id" INTEGER REFERENCES quizzes(id) NOT NULL
+      "quiz_id" INTEGER REFERENCES quizzes(id) NOT NULL,
+      CONSTRAINT "unq_id_quizid" UNIQUE("id", "quiz_id")
     );
   `),
     //4. Questions Table
@@ -32,7 +33,8 @@ exports.up = pgm => {
         "quiz_id" INTEGER REFERENCES quizzes(id) NOT NULL,
         "question" TEXT NOT NULL,
         "answer" TEXT NOT NULL,
-        "points" INTEGER NOT NULL
+        "points" INTEGER NOT NULL,
+        FOREIGN KEY ("category_id", "quiz_id") REFERENCES "jeopardy"."categories"("id", "quiz_id")
       );
   `)
 }
