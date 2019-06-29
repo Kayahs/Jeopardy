@@ -114,5 +114,8 @@ const authLink = new ApolloLink((operation, forward) => {
 })
 
 apolloClient = new ApolloClient({
-  link: ApolloLink.from([errorLink, authLink, stateLink, link])
+  link: ApolloLink.from([errorLink, authLink, stateLink, link]),
+  cache: appCache
 })
+
+export default apolloClient
