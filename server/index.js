@@ -5,6 +5,7 @@ const chalk = require("chalk")
 const path = require("path")
 const { ApolloServer } = require("apollo-server-express")
 const { makeExecutableSchema } = require("graphql-tools")
+const http = require("http")
 
 const postgres = require("./config/postgres")
 const { authUtil } = require("./utils/index")
@@ -73,7 +74,16 @@ apolloServer.applyMiddleware({
   cors: corsConfig
 })
 
-const server = app.listen(PORT, () => {
+let server = http.createServer(app)
+
+apolloServer.installSubscriptionHandlers(server)
+
+postgres.on("error", (err, client) => {
+  console.error("Unexpected error on idle postgres client", err)
+  process.exit(-1)
+})
+
+server.listen(PORT, () => {
   console.log(`>> ${chalk.blue("Express running:")} http://localhost:${PORT}`)
 
   console.log(
