@@ -15,6 +15,7 @@ const MainRouter = () => {
   if (error) {
     throw error
   }
+  const { isLoggedIn } = data.authStatus
   console.log("test", data)
   return (
     <Router>
