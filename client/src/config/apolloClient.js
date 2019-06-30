@@ -3,7 +3,6 @@ import { ApolloClient } from "apollo-client"
 import { ApolloLink, split } from "apollo-link"
 import { withClientState } from "apollo-link-state"
 import { createHttpLink } from "apollo-link-http"
-import { setContext } from "apollo-link-context"
 import { InMemoryCache } from "apollo-cache-inmemory"
 import { getMainDefinition } from "apollo-utilities"
 import { WebSocketLink } from "apollo-link-ws"
@@ -114,5 +113,8 @@ const authLink = new ApolloLink((operation, forward) => {
 })
 
 apolloClient = new ApolloClient({
-  link: ApolloLink.from([errorLink, authLink, stateLink, link])
+  link: ApolloLink.from([errorLink, authLink, stateLink, link]),
+  cache: appCache
 })
+
+export default apolloClient
