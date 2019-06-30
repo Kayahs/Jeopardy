@@ -9,17 +9,33 @@ import { useQuery } from "react-apollo-hooks"
 
 import { GET_AUTH_STATUS } from "gql/queries"
 import Loading from "components/util/Loading"
+import Login from "components/auth/Login"
+import SignUp from "components/auth/SignUp"
+import Dashboard from "components/dashboard/Dashboard"
+
 const MainRouter = () => {
   const { loading, error, data } = useQuery(GET_AUTH_STATUS)
   if (loading) return <Loading />
   if (error) {
     throw error
   }
+  console.log(data)
   const { isLoggedIn } = data.authStatus
-  console.log("test", data)
   return (
     <Router>
-      <Switch />
+      {!isLoggedIn && (
+        <Switch>
+          <Route path="/" exact component={Login} />
+          <Route path="/sign-up" exact component={SignUp} />
+          <Redirect to="/" />
+        </Switch>
+      )}
+      {isLoggedIn && (
+        <Switch>
+          <Route path="/" exact component={Dashboard} />
+          <Redirect to="/" />
+        </Switch>
+      )}
     </Router>
   )
 }
