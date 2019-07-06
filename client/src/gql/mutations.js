@@ -13,7 +13,7 @@ export const LOGIN_MUTATION = gql`
 `
 
 export const SIGNUP_MUTATION = gql`
-  mutation signupMutation($input: SignupInput!) {
+  mutation signupMutation($input: NewUserInput!) {
     signup(input: $input) {
       error {
         code
