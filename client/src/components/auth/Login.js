@@ -22,10 +22,8 @@ const Login = () => {
         password: ""
       }}
       onSubmit={(values, { setSubmitting }) => {
-        console.log("submitting")
         login({ variables: { input: values } })
         setSubmitting(false)
-        console.log("submitting done")
       }}
       validationSchema={Yup.object().shape({
         email: Yup.string()
@@ -41,6 +39,7 @@ const Login = () => {
               <EmailInput />
               <PasswordInput />
               <SubmitButton />
+              <Link to="/sign-up">Create an Account</Link>
             </React.Fragment>
           </form>
         </FormContext.Provider>
