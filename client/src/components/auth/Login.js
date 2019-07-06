@@ -7,7 +7,7 @@ import { Formik } from "formik"
 
 import { LOGIN_MUTATION } from "gql/mutations"
 import { FormContext } from "lib/contexts"
-import { EmailInput, PasswordInput } from "components/form"
+import { EmailInput, PasswordInput, SubmitButton } from "components/form"
 
 const Login = () => {
   const login = useMutation(LOGIN_MUTATION)
@@ -40,10 +40,8 @@ const Login = () => {
             <React.Fragment>
               <EmailInput />
               <PasswordInput />
+              <SubmitButton />
             </React.Fragment>
-            <button type="submit" disabled={props.isSubmitting}>
-              Submit
-            </button>
           </form>
         </FormContext.Provider>
       )}
