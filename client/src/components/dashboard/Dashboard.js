@@ -1,7 +1,13 @@
-import React from 'react'
+import React from "react"
+import Logout from "components/auth/Logout"
 
 const Dashboard = () => {
-  return <div>Dashboard</div>
+  return (
+    <div>
+      Dashboard
+      <Logout />
+    </div>
+  )
 }
 
 export default Dashboard
