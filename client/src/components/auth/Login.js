@@ -7,7 +7,7 @@ import { Formik } from "formik"
 
 import { LOGIN_MUTATION } from "gql/mutations"
 import { FormContext } from "lib/contexts"
-import { EmailInput, PasswordInput } from "components/form"
+import { EmailInput, PasswordInput, SubmitButton } from "components/form"
 
 const Login = () => {
   const login = useMutation(LOGIN_MUTATION)
@@ -22,10 +22,8 @@ const Login = () => {
         password: ""
       }}
       onSubmit={(values, { setSubmitting }) => {
-        console.log("submitting")
         login({ variables: { input: values } })
         setSubmitting(false)
-        console.log("submitting done")
       }}
       validationSchema={Yup.object().shape({
         email: Yup.string()
@@ -40,10 +38,9 @@ const Login = () => {
             <React.Fragment>
               <EmailInput />
               <PasswordInput />
+              <SubmitButton />
+              <Link to="/sign-up">Create an Account</Link>
             </React.Fragment>
-            <button type="submit" disabled={props.isSubmitting}>
-              Submit
-            </button>
           </form>
         </FormContext.Provider>
       )}
