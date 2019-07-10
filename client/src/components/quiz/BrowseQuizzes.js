@@ -11,7 +11,6 @@ const BrowseQuizzes = () => {
   if (error) {
     throw error
   }
-  console.log(data.getQuizzes)
   return <QuizList data={data.getQuizzes} />
 }
 
