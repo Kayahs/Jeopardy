@@ -4,7 +4,6 @@ const cors = require("cors")
 const chalk = require("chalk")
 const path = require("path")
 const { ApolloServer } = require("apollo-server-express")
-const { makeExecutableSchema } = require("graphql-tools")
 const http = require("http")
 
 const postgres = require("./config/postgres")
@@ -43,11 +42,6 @@ app.set("CORS_CONFIG", corsConfig)
 // Allow requests from dev server address
 app.use(cors(corsConfig))
 
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers
-})
-
 const apolloServer = new ApolloServer({
   context: ({ req }) => {
     if (
@@ -65,7 +59,8 @@ const apolloServer = new ApolloServer({
       authUtil
     }
   },
-  schema
+  typeDefs,
+  resolvers
 })
 
 apolloServer.applyMiddleware({

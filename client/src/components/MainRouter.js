@@ -12,6 +12,7 @@ import Loading from "components/util/Loading"
 import Login from "components/auth/Login"
 import SignUp from "components/auth/SignUp"
 import Dashboard from "components/dashboard/Dashboard"
+import BrowseQuizzes from "components/quiz/BrowseQuizzes"
 
 const MainRouter = () => {
   const { loading, error, data } = useQuery(GET_AUTH_STATUS)
@@ -19,7 +20,6 @@ const MainRouter = () => {
   if (error) {
     throw error
   }
-  console.log(data)
   const { isLoggedIn } = data.authStatus
   return (
     <Router>
@@ -33,6 +33,7 @@ const MainRouter = () => {
       {isLoggedIn && (
         <Switch>
           <Route path="/" exact component={Dashboard} />
+          <Route path="/browse" exact component={BrowseQuizzes} />
           <Redirect to="/" />
         </Switch>
       )}

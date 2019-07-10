@@ -2,7 +2,7 @@ const { gql } = require("apollo-server-express")
 
 module.exports = gql`
   type Query {
-    message: String!
+    getQuizzes: [Quiz]
   }
 
   type Mutation {
@@ -27,6 +27,7 @@ module.exports = gql`
   }
 
   type Quiz {
+    id: ID!
     title: String
     owner: User
     categories: [Category]

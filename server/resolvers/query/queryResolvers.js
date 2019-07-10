@@ -1,14 +1,13 @@
 module.exports = {
   Query: {
-    async message(parent, args, { app, req, postgres }, info) {
-      const getMessageQuery = {
-        text: "SELECT * FROM jeopardy.users"
+    async getQuizzes(parent, args, { postgres }, info) {
+      const getQuizzesQuery = {
+        text: "SELECT * FROM jeopardy.quizzes"
       }
 
-      const getMessageResult = await postgres.query(getMessageQuery)
+      const getQuizzesResult = await postgres.query(getQuizzesQuery)
 
-      console.log(getMessageResult.rows)
-      return "Success"
+      return getQuizzesResult.rows
     }
   }
 }
