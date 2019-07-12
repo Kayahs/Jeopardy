@@ -16,6 +16,7 @@ const PORT = 8080
 
 app.set("JWT_SECRET", process.env.JWT_SECRET || "DEV_SECRET")
 app.set("JWT_COOKIE_NAME", "token")
+app.use(cookieParser())
 
 if (process.env.NODE_ENV !== "development") {
   const root = path.resolve(__dirname, "../client")
