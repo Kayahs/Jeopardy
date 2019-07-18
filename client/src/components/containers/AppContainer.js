@@ -2,8 +2,8 @@ import React from "react"
 import { ApolloProvider } from "react-apollo"
 import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks"
 
-import MainRouter from "components/MainRouter"
-import apolloClient from "config/apolloClient"
+import { MainRouter } from "components"
+import { apolloClient } from "config"
 
 const AppContainer = () => {
   return (
