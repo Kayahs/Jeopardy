@@ -20,6 +20,11 @@ export const GET_QUIZZES = gql`
       categories {
         id
         name
+        questions {
+          question
+          answer
+          points
+        }
       }
     }
   }

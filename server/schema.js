@@ -82,7 +82,6 @@ module.exports = gql`
 
   input NewCategoryInput {
     name: String!
-    quiz_id: ID!
     questions: [NewQuestionInput]!
   }
 

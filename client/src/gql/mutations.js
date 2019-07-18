@@ -29,3 +29,26 @@ export const LOGOUT_MUTATION = gql`
     logout
   }
 `
+export const ADD_QUIZ_MUTATION = gql`
+  mutation addQuizMutation($input: NewQuizInput!) {
+    createQuiz(input: $input) {
+      error {
+        code
+        message
+      }
+      quiz {
+        id
+        title
+        owner {
+          id
+          fullname
+          email
+        }
+        categories {
+          id
+          name
+        }
+      }
+    }
+  }
+`
