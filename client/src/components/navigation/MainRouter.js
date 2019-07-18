@@ -7,12 +7,15 @@ import {
 } from "react-router-dom"
 import { useQuery } from "react-apollo-hooks"
 
-import { GET_AUTH_STATUS } from "gql/queries"
-import Loading from "components/util/Loading"
-import Login from "components/auth/Login"
-import SignUp from "components/auth/SignUp"
-import Dashboard from "components/dashboard/Dashboard"
-import BrowseQuizzes from "components/quiz/BrowseQuizzes"
+import { GET_AUTH_STATUS } from "gql"
+import {
+  Login,
+  SignUp,
+  Dashboard,
+  BrowseQuizzes,
+  CreateQuiz,
+  Loading
+} from "components"
 
 const MainRouter = () => {
   const { loading, error, data } = useQuery(GET_AUTH_STATUS)
@@ -34,6 +37,7 @@ const MainRouter = () => {
         <Switch>
           <Route path="/" exact component={Dashboard} />
           <Route path="/browse" exact component={BrowseQuizzes} />
+          <Route path="/create-new-quiz" exact component={CreateQuiz} />
           <Redirect to="/" />
         </Switch>
       )}

@@ -1,6 +1,6 @@
 import React from "react"
 
-import SingleQuiz from "./SingleQuiz"
+import { SingleQuiz } from "components"
 
 const QuizList = ({ data }) => {
   if (!data) {
@@ -9,7 +9,7 @@ const QuizList = ({ data }) => {
   return (
     <ul>
       {data.map(quiz => (
-        <SingleQuiz quiz={quiz} />
+        <SingleQuiz key={`quiz-${quiz.id}`} quiz={quiz} />
       ))}
     </ul>
   )

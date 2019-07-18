@@ -1,5 +1,5 @@
 import React from "react"
-import { FormContext } from "lib/contexts"
+import { FormContext } from "lib"
 
 const SubmitButton = () => (
   <FormContext.Consumer>

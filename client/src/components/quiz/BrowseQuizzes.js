@@ -1,9 +1,8 @@
 import React from "react"
 import { useQuery } from "react-apollo-hooks"
 
-import { GET_QUIZZES } from "gql/queries"
-import Loading from "components/util/Loading"
-import QuizList from "./QuizList"
+import { GET_QUIZZES } from "gql"
+import { Loading, QuizList } from "components"
 
 const BrowseQuizzes = () => {
   const { loading, error, data } = useQuery(GET_QUIZZES)

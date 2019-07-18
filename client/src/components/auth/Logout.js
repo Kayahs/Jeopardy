@@ -1,7 +1,7 @@
 import React from "react"
-
 import { useMutation } from "react-apollo-hooks"
-import { LOGOUT_MUTATION } from "gql/mutations"
+
+import { LOGOUT_MUTATION } from "gql"
 
 const Logout = () => {
   const logout = useMutation(LOGOUT_MUTATION)

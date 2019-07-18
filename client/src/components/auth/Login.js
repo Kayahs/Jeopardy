@@ -5,9 +5,9 @@ import { useMutation } from "react-apollo-hooks"
 import { Link } from "react-router-dom"
 import { Formik } from "formik"
 
-import { LOGIN_MUTATION } from "gql/mutations"
-import { FormContext } from "lib/contexts"
-import { EmailInput, PasswordInput, SubmitButton } from "components/form"
+import { LOGIN_MUTATION } from "gql"
+import { FormContext } from "lib"
+import { EmailInput, PasswordInput, SubmitButton } from "components"
 
 const Login = () => {
   const login = useMutation(LOGIN_MUTATION)

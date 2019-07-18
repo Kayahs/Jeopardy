@@ -1,7 +1,5 @@
-import EmailInput from "./EmailInput"
-import PasswordInput from "./PasswordInput"
-import ErrorText from "./ErrorText"
-import SubmitButton from "./SubmitButton"
-import NameInput from "./NameInput"
-
-export { EmailInput, PasswordInput, ErrorText, SubmitButton, NameInput }
+export { default as EmailInput } from "./EmailInput"
+export { default as PasswordInput } from "./PasswordInput"
+export { default as ErrorText } from "./ErrorText"
+export { default as SubmitButton } from "./SubmitButton"
+export { default as NameInput } from "./NameInput"

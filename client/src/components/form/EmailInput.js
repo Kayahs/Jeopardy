@@ -1,6 +1,6 @@
 import React from "react"
-import { FormContext } from "lib/contexts"
-import ErrorText from "./ErrorText"
+import { FormContext } from "lib"
+import { ErrorText } from "components"
 
 const EmailInput = () => (
   <FormContext.Consumer>

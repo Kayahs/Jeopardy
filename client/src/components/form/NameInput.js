@@ -1,7 +1,7 @@
 import React from "react"
 
-import { FormContext } from "lib/contexts"
-import ErrorText from "./ErrorText"
+import { FormContext } from "lib"
+import { ErrorText } from "components"
 
 const NameInput = () => (
   <FormContext.Consumer>
