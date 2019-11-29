@@ -5,8 +5,8 @@ import { Link } from "react-router-dom"
 import { Formik } from "formik"
 
 import { ADD_QUIZ_MUTATION } from "gql"
-import { FormContext } from "lib"
-import { SubmitButton } from "components"
+import { FormContext, createArray } from "lib"
+import { SubmitButton, CategoryInput, QuizTitle } from "components"
 
 const CreateQuiz = () => {
   const createQuiz = useMutation(ADD_QUIZ_MUTATION)
@@ -19,160 +19,30 @@ const CreateQuiz = () => {
   return (
     <Formik
       initialValues={{
-        title: "",
-        categories: [
+        title: "Q",
+        categories: createArray(
           {
-            name: "",
-            questions: [
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              }
-            ]
+            name: "C",
+            questions: createArray(
+              { question: "QQ", answer: "QA", points: 0 },
+              5
+            )
           },
-          {
-            name: "",
-            questions: [
-              {
-                question: "",
-                answer: ""
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              }
-            ]
-          },
-          {
-            name: "",
-            questions: [
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              }
-            ]
-          },
-          {
-            name: "",
-            questions: [
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              }
-            ]
-          },
-          {
-            name: "",
-            questions: [
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              },
-              {
-                question: "",
-                answer: "",
-                points: 0
-              }
-            ]
-          }
-        ]
+          5
+        )
       }}
       onSubmit={(values, { setSubmitting }) => {
+        values.categories = values.categories.map(category => {
+          const questions = category.questions.map((question, index) => ({
+            ...question,
+            points: 200 * (index + 1)
+          }))
+          return {
+            ...category,
+            questions
+          }
+        })
+        console.log(values)
         createQuiz({ variables: { input: values } })
         setSubmitting(false)
       }}
@@ -198,6 +68,8 @@ const CreateQuiz = () => {
         <FormContext.Provider value={{ ...props, labels }}>
           <form onSubmit={props.handleSubmit}>
             <React.Fragment>
+              <QuizTitle />
+              <CategoryInput />
               <SubmitButton />
             </React.Fragment>
           </form>

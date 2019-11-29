@@ -112,24 +112,68 @@ module.exports = {
     async createQuiz(
       parent,
       {
-        input: { title }
+        input: { title, categories }
       },
       { app, req, postgres, authUtil },
       info
     ) {
+      const client = await postgres.connect()
       const userId = authUtil.authenticate(app, req)
+      try {
+        await client.query("BEGIN")
+        const createQuiz = {
+          text:
+            "INSERT INTO jeopardy.quizzes (title, owner_id) VALUES ($1,$2) RETURNING *",
+          values: [title, userId]
+        }
 
-      const createQuiz = {
-        text:
-          "INSERT INTO jeopardy.quizzes (title, owner_id) VALUES ($1,$2) RETURNING *",
-        values: [title, userId]
-      }
+        const createQuizResult = await postgres.query(createQuiz)
+        const quiz = createQuizResult.rows[0]
 
-      const createQuizResult = await postgres.query(createQuiz)
-      const quiz = createQuizResult.rows[0]
+        const createCategories = categories.map(category =>
+          postgres.query({
+            text:
+              "INSERT INTO jeopardy.categories (name, quiz_id) VALUES ($1,$2) RETURNING *",
+            values: [category.name, quiz.id]
+          })
+        )
 
-      return {
-        quiz
+        const createCategoriesResult = await Promise.all(createCategories)
+
+        const createQuestions = createCategoriesResult.reduce(
+          (acc, cur, index) => {
+            const curQuestions = categories[index].questions.map(question =>
+              postgres.query({
+                text:
+                  "INSERT INTO jeopardy.questions(category_id, quiz_id, question, answer, points) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+                values: [
+                  cur.rows[0].id,
+                  quiz.id,
+                  question.question,
+                  question.answer,
+                  question.points
+                ]
+              })
+            )
+            const newAcc = acc.concat(curQuestions)
+            return newAcc
+          },
+          []
+        )
+
+        const createQuestionsResult = await Promise.all(createQuestions)
+
+        await client.query("COMMIT")
+        return {
+          quiz
+        }
+      } catch (e) {
+        client.query("ROLLBACK", err => {
+          if (err) {
+            console.log(err)
+            throw err
+          }
+        })
       }
     }
     // async addCategory(
